@@ -33,8 +33,13 @@ void Serial_work(void);
 
 int main(){
 
-    int inserts_in_main;
-    Get_input(&inserts_in_main);
+    int inserts_in_main=1000;
+total_ops=10000;
+insert_percent=.99;
+search_percent=.005;
+delete_percent=.005;
+    //Get_input(&inserts_in_main);
+    
     int key,success,attempts,i;
     i = attempts = 0;
 
@@ -45,12 +50,12 @@ int main(){
       if (success) i++;
     }
 
-    Print();
+    //Print();
     int start = clock();
     Serial_work();
     int end = clock();
 
-    printf("Time = %d\n",end-start);
+    printf("Time Seconds = %f\n",(double)(end-start)/ CLOCKS_PER_SEC);
 
 }
 
@@ -102,25 +107,25 @@ void Serial_work(void) {
    double choice;
    int memberCount=0, insertCount=0, deleteCount=0;
    for(i=0;i<total_ops;){
-        choice = ((double)(rand()%100))/100.0;
-        printf("%f\n",choice);
+        choice = ((double)(rand()%10000))/10000.0;
+        //printf("%f\n",choice);
         if(choice <search_percent && memberCount < total_ops*search_percent){
 		val = rand()%MAX_KEY;
       		Member(val);
 		memberCount++;i++;
-		printf("Member %d\n",i);
+		//printf("Member %d\n",i);
 	}
         else if(choice >= search_percent && choice <search_percent+insert_percent && insertCount < total_ops*insert_percent){
 		val = rand()%MAX_KEY;
       		Insert(val);
 		insertCount++;i++;
-		printf("Insert %d\n",i);
+		//printf("Insert %d\n",i);
 	}
         else if(choice >=search_percent+insert_percent && deleteCount < total_ops*delete_percent){
 		val = rand()%MAX_KEY;
       		Delete(val);
 		deleteCount++;i++;
-		printf("Delete %d\n",i);
+		//printf("Delete %d\n",i);
 	}
 
    }

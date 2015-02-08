@@ -32,7 +32,12 @@ pthread_rwlock_t rwlock;
 int main(){
 
     int inserts_in_main,success,key;
-    Get_input(&inserts_in_main);
+    inserts_in_main=1000;
+total_ops=10000;
+insert_percent=.99;
+search_percent=.005;
+delete_percent=.005;
+    //Get_input(&inserts_in_main);
 
     long i;
     i = 0;
@@ -141,7 +146,7 @@ void* Thread_work(void* rank) {
    double choice;
    int memberCount=0, insertCount=0, deleteCount=0;
    for(i=0;i<ops_per_thread;){
-        choice = ((double)(rand()%100))/100.0;
+        choice = ((double)(rand()%10000))/10000.0;
         //printf("%f\n",choice);
         if(choice <search_percent && memberCount < ops_per_thread*search_percent){
 		val = rand()%MAX_KEY;
