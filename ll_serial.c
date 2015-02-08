@@ -98,29 +98,49 @@ void Serial_work(void) {
    int i, val;
    double which_op;
    unsigned seed = 1;
-   int my_member_count = 0, my_insert_count=0, my_delete_count=0;
+   
+   double choice;
+   int memberCount=0, insertCount=0, deleteCount=0;
+   for(i=0;i<total_ops;){
+        choice = ((double)(rand()%100))/100.0;
+        printf("%f\n",choice);
+        if(choice <search_percent && memberCount < total_ops*search_percent){
+		val = rand()%MAX_KEY;
+      		Member(val);
+		memberCount++;i++;
+		printf("Member %d\n",i);
+	}
+        else if(choice >= search_percent && choice <search_percent+insert_percent && insertCount < total_ops*insert_percent){
+		val = rand()%MAX_KEY;
+      		Insert(val);
+		insertCount++;i++;
+		printf("Insert %d\n",i);
+	}
+        else if(choice >=search_percent+insert_percent && deleteCount < total_ops*delete_percent){
+		val = rand()%MAX_KEY;
+      		Delete(val);
+		deleteCount++;i++;
+		printf("Delete %d\n",i);
+	}
 
-   for (i = 0; i < total_ops*search_percent; i++) {
+   }
+
+
+   /*for (i = 0; i < total_ops*search_percent; i++) {
       val = rand()%MAX_KEY;
       Member(val);
-      //printf("Member %d -> %d \n",val,Member(val));
    } 
    //printf("search = %f\n",total_ops*search_percent);
     for (i = 0; i < total_ops*insert_percent; i++) {
       val = rand()%MAX_KEY;
       Insert(val);
-      //printf("Insert %d\n",val);
-      //Print();
    } 
    //printf("search = %f\n",total_ops*insert_percent);
    for (i = 0; i < total_ops*delete_percent; i++) {
       val = rand()%MAX_KEY;
       Delete(val);
-      //printf("Delete %d - > %d\n",val,Delete(val));
-      //Print();
       
-   } 
-   //printf("search = %f\n",total_ops*delete_percent);
+   }*/
 } 
 
 int  Member(int value) {

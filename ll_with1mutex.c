@@ -137,36 +137,38 @@ void* Thread_work(void* rank) {
    int my_member=0, my_insert=0, my_delete=0;
    int ops_per_thread = total_ops/thread_count;
 
+   double choice;
+   int memberCount=0, insertCount=0, deleteCount=0;
+   for(i=0;i<ops_per_thread;){
+        choice = ((double)(rand()%100))/100.0;
+        //printf("%f\n",choice);
+        if(choice <search_percent && memberCount < ops_per_thread*search_percent){
+		val = rand()%MAX_KEY;
+      		pthread_mutex_lock(&mutex);
+      		Member(val);
+      		//printf("Member %d from %ldresult %d\n",val,my_rank,i);
+      		pthread_mutex_unlock(&mutex);
+                memberCount++;i++;
+		//printf("Member %d\n",i);
+	}
+        else if(choice >= search_percent && choice <search_percent+insert_percent && insertCount < ops_per_thread*insert_percent){
+		val = rand()%MAX_KEY;
+      		pthread_mutex_lock(&mutex);
+         	Insert(val);
+         	//printf("Insert %d from %ld %d\n",val,my_rank,i);
+         	pthread_mutex_unlock(&mutex);
+                insertCount++;i++;
+	}
+        else if(choice >=search_percent+insert_percent && deleteCount < ops_per_thread*delete_percent){
+		val = rand()%MAX_KEY;
+      		pthread_mutex_lock(&mutex);
+         	Delete(val);
+         	//printf("Delete %d from %ld result %d\n",val,my_rank,i);
+         	pthread_mutex_unlock(&mutex);
+                deleteCount++;i++;
+	}
 
-   for (i = 0; i < ops_per_thread*search_percent; i++) {
-      val = rand()%MAX_KEY;
-      pthread_mutex_lock(&mutex);
-      Member(val);
-      //printf("Member %d from %ldresult %d\n",val,my_rank,Member(val));
-      //Print();
-      pthread_mutex_unlock(&mutex);
-      
-   } 
-   for (i = 0; i < ops_per_thread*insert_percent; i++) {
-      val = rand()%MAX_KEY;
-      pthread_mutex_lock(&mutex);
-         Insert(val);
-         //printf("Insert %d from %ld \n",val,my_rank);
-         //Print();
-         pthread_mutex_unlock(&mutex);
-      
-   } 
-   for (i = 0; i < ops_per_thread*delete_percent; i++) {
-      val = rand()%MAX_KEY;
-      pthread_mutex_lock(&mutex);
-         Delete(val);
-         //printf("Delete %d from %ld result %d\n",val,my_rank,Delete(val));
-         //Print();
-         pthread_mutex_unlock(&mutex);
-      
-   } 
-
-   
+   }
 
    return NULL;
 }
